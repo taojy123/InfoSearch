@@ -1,0 +1,133 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>信息检索系统</title>
+    <link rel="stylesheet" href="/static/css/pure-min.css">
+    <link rel="stylesheet" href="/static/css/baby-blue.css">
+    <link rel="stylesheet" href="/static/css/tablesorter/blue/style.css" type="text/css" media="print, projection, screen" />
+    <script type="text/javascript" src="/static/js/jquery-1.4.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tablesorter.js"></script>
+    <script type="text/javascript">
+        var num = {{ num }}
+        $(function(){
+            //表格显示
+            $("#myTable").tablesorter({
+                widgets: ['zebra']
+            })
+
+            $("#add_con").click(function(){
+                num = num + 1
+                var html = '<p><input type="text" name="value_' + num + '" />\n<select name="key_' + num + '" >'
+                {% for k in keys %}
+                    html = html + '<option value="{{ k.name }}">{{ k.name }}</option>'
+                {% endfor %}
+                html = html + '</select></p>'
+                $("#con").append($(html))
+            })
+        })
+    </script>
+</head>
+
+<body>
+
+<div class="pure-g-r" id="layout" style="letter-spacing:0">
+
+    <div class="pure-u" id="menu">
+        <div class="pure-menu pure-menu-open">
+            <a class="pure-menu-heading" href="/" style="text-transform:capitalize" >InfoSearch</a>
+
+            <ul>
+                <li class="pure-menu-selected ">
+                    <a href="/">领汇信息筛选</a>
+                </li>
+
+                <li class=" ">
+                    <a href="/add/">添加记录</a>
+                </li>
+
+                <li class=" menu-item-divided">
+                    <a href="/admin/">管理字段</a>
+                </li>
+
+                <li class="menu-item-divided">
+                    <a href="#">登录</a>
+                </li>
+
+                <li class=" ">
+                    <a href="#">登出</a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+
+    <div id="content">
+
+        <div class="header">
+            <h1>领汇信息筛选</h1>
+        </div>
+
+        <div id="search" style="margin-left: 100px">
+            <form action="/search/" method="get" class="pure-form">
+                <div id="con">
+                    {% for sk,sv in searchs %}
+                        <p>
+                            <input type="text" name="value_{{ forloop.counter0 }}" value="{{ sv }}"/>
+                            <select name="key_{{ forloop.counter0 }}" >
+                                {% for k in keys %}
+                                    {% ifequal sk k.name %}
+                                        <option value="{{ k.name }}" selected="selected">{{ k.name }}</option>
+                                    {% else %}
+                                        <option value="{{ k.name }}">{{ k.name }}</option>
+                                    {% endifequal %}
+                                {% endfor %}
+                            </select>
+                        </p>
+                    {% endfor %}
+                </div>
+                <p>
+                    <input type="submit" value="筛选" class="pure-button pure-button-primary"/>
+                    <button id="add_con" class="pure-button pure-button-primary">增加筛选条件</button>
+                </p>
+            </form>
+        </div>
+
+        <div id=tab>
+            <table id="myTable" class="tablesorter" style="border-collapse: separate; border-spacing:1px;">
+
+                <thead>
+                <tr>
+                    {% for k in keys %}
+                        <th>{{ k.name }}</th>
+                    {% endfor %}
+                    <th>操作</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for r,uid in rs %}
+                    <tr>
+                        {% for value in r %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                        <td>
+                            <a href="/update/?uid={{ uid }}">修改</a>
+                            <a href="/del_data/?uid={{ uid }}" style="float: right" onclick="return confirm('确定要删除此条记录')">删除</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>

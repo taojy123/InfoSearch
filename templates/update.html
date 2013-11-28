@@ -1,0 +1,81 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>修改记录</title>
+    <link rel="stylesheet" href="/static/css/pure-min.css">
+    <link rel="stylesheet" href="/static/css/baby-blue.css">
+    <link rel="stylesheet" href="/static/css/tablesorter/blue/style.css" type="text/css" media="print, projection, screen" />
+    <script type="text/javascript" src="/static/js/jquery-1.4.3.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.tablesorter.js"></script>
+</head>
+
+<body>
+
+    <div class="pure-g-r" id="layout" style="letter-spacing:0">
+
+
+        <div class="pure-u" id="menu">
+            <div class="pure-menu pure-menu-open">
+                <a class="pure-menu-heading" href="/" style="text-transform:capitalize" >InfoSearch</a>
+
+                <ul>
+                    <li class=" ">
+                        <a href="/">领汇信息筛选</a>
+                    </li>
+
+                    <li class=" ">
+                        <a href="/add/">添加记录</a>
+                    </li>
+
+                    <li class=" menu-item-divided">
+                        <a href="/admin/">管理字段</a>
+                    </li>
+
+                    <li class="menu-item-divided">
+                        <a href="#">登录</a>
+                    </li>
+
+                    <li class=" ">
+                        <a href="#">登出</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+
+        <div id="content">
+
+            <div class="header">
+                <h1>修改记录</h1>
+            </div>
+
+            <div style="margin-left: 100px;width: 300px">
+
+                <form method="get" action="/add_action/" onsubmit="return confirm('确定修改此条信息记录?')" class="pure-form">
+                    <input type="hidden" name="uid"  value="{{ uid }}" />
+                    {% for k, value in rs %}
+                        <p>
+                            <span>{{ k.name }}:</span>
+                            <input type="text" name="{{ k.id }}" style="float: right" value="{{ value }}" />
+                        </p>
+                    {% endfor %}
+
+                    <br/>
+
+                    <p style="margin-left: 150px">
+                        <input type="submit" name="submit" value="修改记录" class="pure-button pure-button-primary"/>
+                    </p>
+                </form>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
